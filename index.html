@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Helper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    input, textarea {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .output {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Decision Helper</h1>
+  <p>Enter your question and possible answers below:</p>
+  <input type="text" id="question" placeholder="Your question here..." />
+  <textarea id="answers" placeholder="Enter answers separated by commas..."></textarea>
+  <button onclick="makeDecision()">Get Decision</button>
+  <div class="output" id="output"></div>
+
+  <script>
+    function makeDecision() {
+      const question = document.getElementById('question').value;
+      const answers = document.getElementById('answers').value.split(',');
+      if (question.trim() === "" || answers.length === 0 || answers[0].trim() === "") {
+        document.getElementById('output').innerText = "Please provide a question and at least one answer.";
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * answers.length);
+      const chosenAnswer = answers[randomIndex].trim();
+      document.getElementById('output').innerHTML = `<p>Question: ${question}</p><p>Decision: ${chosenAnswer}</p>`;
+    }
+  </script>
+</body>
+</html>
