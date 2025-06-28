@@ -37,6 +37,10 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    .statistics {
+      margin-top: 20px;
+      font-weight: normal;
+    }
   </style>
 </head>
 <body>
@@ -44,20 +48,46 @@
   <p>Enter your question and possible answers below:</p>
   <input type="text" id="question" placeholder="Your question here..." />
   <textarea id="answers" placeholder="Enter answers separated by commas..."></textarea>
+  <input type="number" id="tries" placeholder="Number of tries" value="1" min="1" />
   <button onclick="makeDecision()">Get Decision</button>
   <div class="output" id="output"></div>
+  <div class="statistics" id="statistics"></div>
 
   <script>
-    function makeDecision() {
+    async function makeDecision() {
       const question = document.getElementById('question').value;
       const answers = document.getElementById('answers').value.split(',');
+      const tries = parseInt(document.getElementById('tries').value) || 1;
+      const statistics = {};
+
       if (question.trim() === "" || answers.length === 0 || answers[0].trim() === "") {
         document.getElementById('output').innerText = "Please provide a question and at least one answer.";
         return;
       }
-      const randomIndex = Math.floor(Math.random() * answers.length);
-      const chosenAnswer = answers[randomIndex].trim();
-      document.getElementById('output').innerHTML = `<p>Question: ${question}</p><p>Decision: ${chosenAnswer}</p>`;
+
+      document.getElementById('output').innerHTML = `<p>Question: ${question}</p>`;
+      for (let i = 0; i < tries; i++) {
+        const randomIndex = Math.floor(Math.random() * answers.length);
+        const chosenAnswer = answers[randomIndex].trim();
+        
+        // Update statistics
+        statistics[chosenAnswer] = (statistics[chosenAnswer] || 0) + 1;
+
+        document.getElementById('output').innerHTML += `<p>Decision ${i + 1}: ${chosenAnswer}</p>`;
+        
+        // Delay between tries
+        if (i < tries - 1) {
+          await new Promise(resolve => setTimeout(resolve, 834));
+        }
+      }
+
+      // Display statistics
+      let statsOutput = "<h3>Statistics:</h3><ul>";
+      for (const [answer, count] of Object.entries(statistics)) {
+        statsOutput += `<li>${answer}: ${count} time(s)</li>`;
+      }
+      statsOutput += "</ul>";
+      document.getElementById('statistics').innerHTML = statsOutput;
     }
   </script>
 </body>
